@@ -28,6 +28,14 @@ public class HookSniff {
     public lazy var search = SearchResource(client: self)
     public lazy var billing = BillingResource(client: self)
     public lazy var health = HealthResource(client: self)
+    public lazy var environments = EnvironmentsResource(client: self)
+    public lazy var backgroundTasks = BackgroundTasksResource(client: self)
+    public lazy var operationalWebhooks = OperationalWebhooksResource(client: self)
+    public lazy var messagePoller = MessagePollerResource(client: self)
+    public lazy var inbound = InboundResource(client: self)
+    public lazy var connector = ConnectorResource(client: self)
+    public lazy var integration = IntegrationResource(client: self)
+    public lazy var stream = StreamResource(client: self)
 
     /// Create a new HookSniff client.
     ///
