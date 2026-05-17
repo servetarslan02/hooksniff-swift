@@ -1,54 +1,45 @@
-# 🪝 HookSniff Swift SDK
+# HookSniff Swift SDK
 
-[![Swift 5.9+](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+<p align="center">
+  <a href="https://github.com/servetarslan02/HookSniff"><img src="https://img.shields.io/github/license/servetarslan02/HookSniff" alt="License"></a>
+</p>
 
-Official Swift client for [HookSniff](https://hooksniff.vercel.app) webhook delivery service.
+Swift SDK for the [HookSniff](https://hooksniff.com) webhook delivery platform.
 
 ## Installation
 
-### Swift Package Manager
-
-Add the dependency to your `Package.swift`:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/servetarslan02/hooksniff-swift.git", from: "0.3.0")
-]
+```bash
+.package(url: "https://github.com/servetarslan02/hooksniff-swift", from: "1.0.0")
 ```
-
-Then add `"HookSniff"` to your target's dependencies.
-
-### Xcode
-
-1. File → Add Package Dependencies
-2. Enter: `https://github.com/servetarslan02/hooksniff-swift.git`
-3. Select "Up to Next Major Version" → `0.3.0`
 
 ## Quick Start
 
 ```swift
-import HookSniff
-
-// Configure the SDK
-OpenAPIAPI.basePath = "https://hooksniff-api-1046140057667.europe-west1.run.app"
-
-// Create an endpoint
-let endpoint = CreateEndpointRequest(url: "https://your-app.com/webhook")
-
-// Send a webhook
-let webhook = CreateWebhookRequest(
-    endpointId: "YOUR_ENDPOINT_ID",
-    event: "order.created",
-    data: ["order_id": "12345"]
-)
+let client = HookSniff(apiKey: "hs_xxx")
+let endpoints = try await client.endpoint.list()
+print(endpoints)
 ```
 
-## Documentation
+## Webhook Verification
 
-- [API Reference](docs/)
-- [HookSniff Documentation](https://hooksniff.vercel.app)
+```swift
+let wh = try Webhook(secret: "whsec_xxx")
+let payload = try wh.verify(body: body, headers: headers)
+```
 
-## License
+## Resources
 
-MIT — see [LICENSE](LICENSE) for details.
+| Resource | Methods |
+|----------|---------|
+| Endpoint | list, create, get, update, delete |
+| Message | create, list, get |
+| MessageAttempt | list, listByMsg, get, resend |
+| Authentication | dashboardAccess |
+| EventType | list |
+| Statistics | aggregate |
+
+## Links
+
+- [Documentation](https://docs.hooksniff.com)
+- [API Reference](https://api.hooksniff.com)
+- [GitHub](https://github.com/servetarslan02/HookSniff)
