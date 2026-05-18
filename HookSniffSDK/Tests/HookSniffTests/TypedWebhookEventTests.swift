@@ -121,4 +121,83 @@ final class TypedWebhookEventTests: XCTestCase {
             XCTAssertEqual(event.event, eventType)
         }
     }
+
+    func testEmptyData() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.created",
+            "data": [:] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointCreatedData()
+        XCTAssertNotNil(data)
+        XCTAssertEqual(data?.appId, "")
+    }
+
+    func testMissingDataKey() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.created",
+            "timestamp": ""
+        ] as [String: Any])
+        let data = event.parseEndpointCreatedData()
+        XCTAssertNil(data)
+    }
+
+    func testUnicodeData() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.created",
+            "data": ["appId": "ünïcödé", "endpointId": "日本語"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointCreatedData()
+        XCTAssertEqual(data?.appId, "ünïcödé")
+        XCTAssertEqual(data?.endpointId, "日本語")
+    }
+
+    func testEndpointUpdatedData() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.updated",
+            "data": ["appId": "a1", "endpointId": "e1"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointUpdatedData()
+        XCTAssertEqual(data?.appId, "a1")
+    }
+
+    func testEndpointDeletedData() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.deleted",
+            "data": ["appId": "a1", "endpointId": "e1"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointDeletedData()
+        XCTAssertEqual(data?.endpointId, "e1")
+    }
+
+    func testEndpointEnabledData() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.enabled",
+            "data": ["appId": "a1", "endpointId": "e1"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointEnabledData()
+        XCTAssertEqual(data?.appId, "a1")
+    }
+
+    func testGetMissingKey() {
+        let event = WebhookEvent.parse([
+            "event": "test",
+            "data": ["x": 1] as [String: Any],
+            "timestamp": ""
+        ])
+        XCTAssertNil(event.get("missing"))
+    }
+
+    func testEventTypeProperty() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.created",
+            "data": [:] as [String: Any],
+            "timestamp": "2026-05-19"
+        ])
+        XCTAssertEqual(event.eventType, "endpoint.created")
+    }
 }
