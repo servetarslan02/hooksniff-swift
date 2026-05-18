@@ -72,7 +72,7 @@ public class HookSniff {
         // Headers
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         urlRequest.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-        urlRequest.setValue("hooksniff-sdk/1.1.0/swift", forHTTPHeaderField: "User-Agent")
+        urlRequest.setValue("hooksniff-sdk/1.2.0/swift", forHTTPHeaderField: "User-Agent")
         urlRequest.setValue(autoIdempotencyKey(), forHTTPHeaderField: "Idempotency-Key")
 
         // Body
@@ -144,6 +144,35 @@ public class HookSniff {
     ) async throws -> Any? {
         let result = try await request(method: method, path: path, body: body)
         return result.body
+    }
+
+    /// Convenience: request that returns only the body as a typed dictionary
+    func requestDict(
+        method: String,
+        path: String,
+        body: [String: Any]? = nil
+    ) async throws -> [String: Any] {
+        let result = try await request(method: method, path: path, body: body)
+        return JSONHelpers.dict(from: result.body)
+    }
+
+    /// Convenience: request that returns only the body as a typed array
+    func requestArray(
+        method: String,
+        path: String,
+        body: [String: Any]? = nil
+    ) async throws -> [[String: Any]] {
+        let result = try await request(method: method, path: path, body: body)
+        return JSONHelpers.dataArray(from: result.body)
+    }
+
+    /// Convenience: request that discards the response body (for DELETE, etc.)
+    func requestVoid(
+        method: String,
+        path: String,
+        body: [String: Any]? = nil
+    ) async throws {
+        _ = try await request(method: method, path: path, body: body)
     }
 
     private func autoIdempotencyKey() -> String {

@@ -5,6 +5,24 @@ All notable changes to the HookSniff SDK will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] — 2026-05-18
+
+### Added
+- **EnvironmentsResource** — full CRUD for environments and variables
+- **BackgroundTasksResource** — list, get, cancel background tasks
+- **OperationalWebhooksResource** — CRUD + delivery logs
+- **MessagePollerResource** — poll, seek, commit
+- **InboundResource** — configs + inbound webhook handling
+- **ConnectorResource** — CRUD for connectors and configs
+- **requestDict / requestArray / requestVoid** helper methods on HookSniff client
+
+### Fixed
+- **IntegrationResource** — return types fixed (was using raw `request()` incorrectly)
+- **StreamResource** — return types fixed, publish path corrected to `/api/v1/stream/events`
+- **HealthResource** — API path fixed from `/health` to `/api/v1/health`
+- **Webhook signature verification** — space-separated multi-signature parsing fixed
+- Version string updated to 1.2.0
+
 ## [0.4.0] — 2026-05-12
 
 ### Added

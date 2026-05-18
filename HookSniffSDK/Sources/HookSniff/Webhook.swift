@@ -133,16 +133,19 @@ public final class Webhook {
     }
 
     private static func verifySignature(expected: String, actual: String) -> Bool {
-        // Handle comma-separated multiple signatures
-        let signatures = actual.split(separator: ",").map { String($0).trimmingCharacters(in: .whitespaces) }
+        // Handle space-separated multiple signatures (e.g., "v1,abc v1,def")
+        let signatures = actual.split(separator: " ").map { String($0).trimmingCharacters(in: .whitespaces) }
+
+        let expectedParts = expected.split(separator: ",", maxSplits: 1)
+        let expectedPart = expectedParts.count > 1 ? String(expectedParts[1]) : String(expectedParts[0])
 
         for sig in signatures {
-            // Strip version prefix
+            // Each signature is in "v1,base64hmac" format
             let parts = sig.split(separator: ",", maxSplits: 1)
-            let sigPart = parts.count > 1 ? String(parts[1]) : String(parts[0])
-
-            let expectedParts = expected.split(separator: ",", maxSplits: 1)
-            let expectedPart = expectedParts.count > 1 ? String(expectedParts[1]) : String(expectedParts[0])
+            if parts.count < 2 { continue }
+            let version = String(parts[0])
+            if version != "v1" { continue }
+            let sigPart = String(parts[1])
 
             // Timing-safe comparison
             guard let expectedData = expectedPart.data(using: .utf8),
