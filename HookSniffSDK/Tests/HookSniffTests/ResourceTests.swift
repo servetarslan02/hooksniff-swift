@@ -260,7 +260,7 @@ final class ResourceTests: XCTestCase {
         let result = try await resource.getStatus()
 
         XCTAssertEqual(mock.requests[0].method, "GET")
-        XCTAssertEqual(mock.requests[0].path, "/api/v1/health")
+        XCTAssertEqual(mock.requests[0].path, "/v1/health")
         XCTAssertNil(mock.requests[0].body)
         XCTAssertEqual(result["status"] as? String, "healthy")
     }

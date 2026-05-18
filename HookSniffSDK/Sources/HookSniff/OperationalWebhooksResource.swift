@@ -8,31 +8,31 @@ public final class OperationalWebhooksResource {
 
     /// List all operational webhook endpoints.
     public func list() async throws -> [[String: Any]] {
-        try await client.requestArray(method: "GET", path: "/api/v1/operational-webhooks")
+        try await client.requestArray(method: "GET", path: "/v1/operational-webhooks")
     }
 
     /// Create an operational webhook endpoint.
     public func create(_ body: [String: Any]) async throws -> [String: Any] {
-        try await client.requestDict(method: "POST", path: "/api/v1/operational-webhooks", body: body)
+        try await client.requestDict(method: "POST", path: "/v1/operational-webhooks", body: body)
     }
 
     /// Get an operational webhook endpoint by ID.
     public func get(_ id: String) async throws -> [String: Any] {
-        try await client.requestDict(method: "GET", path: "/api/v1/operational-webhooks/\(id)")
+        try await client.requestDict(method: "GET", path: "/v1/operational-webhooks/\(id)")
     }
 
     /// Update an operational webhook endpoint.
     public func update(_ id: String, _ body: [String: Any]) async throws -> [String: Any] {
-        try await client.requestDict(method: "PUT", path: "/api/v1/operational-webhooks/\(id)", body: body)
+        try await client.requestDict(method: "PUT", path: "/v1/operational-webhooks/\(id)", body: body)
     }
 
     /// Delete an operational webhook endpoint.
     public func delete(_ id: String) async throws {
-        try await client.requestVoid(method: "DELETE", path: "/api/v1/operational-webhooks/\(id)")
+        try await client.requestVoid(method: "DELETE", path: "/v1/operational-webhooks/\(id)")
     }
 
     /// List deliveries for an operational webhook.
     public func listDeliveries(_ id: String) async throws -> [[String: Any]] {
-        try await client.requestArray(method: "GET", path: "/api/v1/operational-webhooks/\(id)/deliveries")
+        try await client.requestArray(method: "GET", path: "/v1/operational-webhooks/\(id)/deliveries")
     }
 }

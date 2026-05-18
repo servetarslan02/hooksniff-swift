@@ -8,41 +8,41 @@ public final class IntegrationResource {
 
     /// List all integrations.
     public func list() async throws -> [[String: Any]] {
-        try await client.requestArray(method: "GET", path: "/api/v1/integrations")
+        try await client.requestArray(method: "GET", path: "/v1/integrations")
     }
 
     /// Get integration details.
     public func get(_ id: String) async throws -> [String: Any] {
-        try await client.requestDict(method: "GET", path: "/api/v1/integrations/\(id)")
+        try await client.requestDict(method: "GET", path: "/v1/integrations/\(id)")
     }
 
     /// Create a new integration.
     public func create(_ body: [String: Any]) async throws -> [String: Any] {
-        try await client.requestDict(method: "POST", path: "/api/v1/integrations", body: body)
+        try await client.requestDict(method: "POST", path: "/v1/integrations", body: body)
     }
 
     /// Update an integration.
     public func update(_ id: String, _ body: [String: Any]) async throws -> [String: Any] {
-        try await client.requestDict(method: "PUT", path: "/api/v1/integrations/\(id)", body: body)
+        try await client.requestDict(method: "PUT", path: "/v1/integrations/\(id)", body: body)
     }
 
     /// Delete an integration.
     public func delete(_ id: String) async throws {
-        try await client.requestVoid(method: "DELETE", path: "/api/v1/integrations/\(id)")
+        try await client.requestVoid(method: "DELETE", path: "/v1/integrations/\(id)")
     }
 
     /// Send a test event.
     public func test(_ id: String) async throws -> [String: Any] {
-        try await client.requestDict(method: "POST", path: "/api/v1/integrations/\(id)/test")
+        try await client.requestDict(method: "POST", path: "/v1/integrations/\(id)/test")
     }
 
     /// List events for an integration.
     public func listEvents(_ id: String) async throws -> [[String: Any]] {
-        try await client.requestArray(method: "GET", path: "/api/v1/integrations/\(id)/events")
+        try await client.requestArray(method: "GET", path: "/v1/integrations/\(id)/events")
     }
 
     /// Get statistics for an integration.
     public func getStats(_ id: String) async throws -> [String: Any] {
-        try await client.requestDict(method: "GET", path: "/api/v1/integrations/\(id)/stats")
+        try await client.requestDict(method: "GET", path: "/v1/integrations/\(id)/stats")
     }
 }
