@@ -16,6 +16,8 @@ public class HookSniff {
     public let baseURL: String
     public let timeout: TimeInterval
     public let numRetries: Int
+    public let debug: Bool
+    public let customHeaders: [String: String]
 
     // Resource accessors
     public lazy var endpoints = EndpointsResource(client: self)
@@ -44,16 +46,22 @@ public class HookSniff {
     ///   - baseURL: Base URL of the HookSniff API (default: production).
     ///   - timeout: Request timeout in seconds (default: 30).
     ///   - numRetries: Number of retries for 5xx errors (default: 3).
+    ///   - debug: Enable debug logging (default: false).
+    ///   - headers: Custom headers to include in every request.
     public init(
         apiKey: String,
         baseURL: String? = nil,
         timeout: TimeInterval = 30,
-        numRetries: Int = 3
+        numRetries: Int = 3,
+        debug: Bool = false,
+        headers: [String: String] = [:]
     ) {
         self.apiKey = apiKey
         self.baseURL = (baseURL ?? Self.defaultBaseURL).replacingOccurrences(of: "/+$", with: "", options: .regularExpression)
         self.timeout = timeout
         self.numRetries = numRetries
+        self.debug = debug
+        self.customHeaders = headers
     }
 
     // MARK: - HTTP Client (overridable for testing)
