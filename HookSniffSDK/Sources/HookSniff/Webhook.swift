@@ -35,9 +35,9 @@ public final class Webhook {
     ///   - payload: The raw request body (String)
     ///   - headers: Dictionary containing webhook-id, webhook-timestamp, webhook-signature
     ///              (also accepts svix-id, svix-timestamp, svix-signature)
-    /// - Returns: The parsed payload as a dictionary if verification succeeds
+    /// - Returns: A parsed WebhookEvent with typed fields
     /// - Throws: `VerificationError` if verification fails
-    public func verify(payload: String, headers: [String: String]) throws -> [String: Any] {
+    public func verify(payload: String, headers: [String: String]) throws -> WebhookEvent {
         let normalized = Self.normalizeHeaders(headers)
 
         guard let msgId = getHeader(normalized, name: "webhook-id") else {
@@ -72,11 +72,55 @@ public final class Webhook {
         }
 
         // Parse payload
+        return parsePayload(payload)
+    }
+
+    /// Verify and return raw payload without parsing.
+    /// Use this when you need the raw dictionary instead of a typed event.
+    public func verifyRaw(payload: String, headers: [String: String]) throws -> [String: Any] {
+        let normalized = Self.normalizeHeaders(headers)
+
+        guard let msgId = getHeader(normalized, name: "webhook-id") else {
+            throw VerificationError(message: "Missing webhook-id header")
+        }
+        guard let timestamp = getHeader(normalized, name: "webhook-timestamp") else {
+            throw VerificationError(message: "Missing webhook-timestamp header")
+        }
+        guard let signature = getHeader(normalized, name: "webhook-signature") else {
+            throw VerificationError(message: "Missing webhook-signature header")
+        }
+
+        guard let timestampNum = Int(timestamp) else {
+            throw VerificationError(message: "Invalid webhook-timestamp header")
+        }
+
+        let now = Int(Date().timeIntervalSince1970)
+        let tolerance = Self.timestampToleranceSeconds
+        if abs(now - timestampNum) > tolerance {
+            throw VerificationError(message: "Webhook timestamp is too old or too new (tolerance: \(tolerance)s)")
+        }
+
+        let content = "\(msgId).\(timestamp).\(payload)"
+        let hmac = Self.computeHMAC(secret: secret, content: content)
+        let expectedSig = "v1,\(hmac.base64EncodedString())"
+
+        guard Self.verifySignature(expected: expectedSig, actual: signature) else {
+            throw VerificationError(message: "Invalid webhook signature")
+        }
+
         guard let data = payload.data(using: .utf8),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             return ["_raw": payload]
         }
         return json
+    }
+
+    private func parsePayload(_ payload: String) -> WebhookEvent {
+        guard let data = payload.data(using: .utf8),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return WebhookEvent(event: "", data: [:], timestamp: "")
+        }
+        return WebhookEvent.parse(json)
     }
 
     /// Sign a payload (for testing or server-side webhook sending).
