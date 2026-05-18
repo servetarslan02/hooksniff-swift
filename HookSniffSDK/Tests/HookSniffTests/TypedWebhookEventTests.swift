@@ -200,4 +200,76 @@ final class TypedWebhookEventTests: XCTestCase {
         ])
         XCTAssertEqual(event.eventType, "endpoint.created")
     }
+
+    func testLargeData() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.created",
+            "data": ["appId": String(repeating: "a", count: 10000), "endpointId": String(repeating: "e", count: 10000)] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointCreatedData()
+        XCTAssertEqual(data?.appId.count, 10000)
+    }
+
+    func testSpecialCharacters() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.created",
+            "data": ["appId": "a@b.c", "endpointId": "e#1"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointCreatedData()
+        XCTAssertEqual(data?.appId, "a@b.c")
+    }
+
+    func testTriggerNone() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.disabled",
+            "data": ["appId": "a", "endpointId": "e", "trigger": "none"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointDisabledData()
+        XCTAssertEqual(data?.trigger, "none")
+    }
+
+    func testTriggerFirstFailure() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.disabled",
+            "data": ["appId": "a", "endpointId": "e", "trigger": "first-failure"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointDisabledData()
+        XCTAssertEqual(data?.trigger, "first-failure")
+    }
+
+    func testFailSince() {
+        let event = WebhookEvent.parse([
+            "event": "endpoint.disabled",
+            "data": ["appId": "a", "endpointId": "e", "failSince": "2026-01"] as [String: Any],
+            "timestamp": ""
+        ])
+        let data = event.parseEndpointDisabledData()
+        XCTAssertEqual(data?.failSince, "2026-01")
+    }
+
+    func testAllEndpointTypes() {
+        for type in ["endpoint.created", "endpoint.updated", "endpoint.deleted", "endpoint.enabled", "endpoint.disabled"] {
+            let event = WebhookEvent.parse(["event": type, "data": ["appId": "a"] as [String: Any], "timestamp": ""])
+            XCTAssertEqual(event.event, type)
+        }
+    }
+
+    func testGetExistingKey() {
+        let event = WebhookEvent.parse(["event": "test", "data": ["x": 1] as [String: Any], "timestamp": ""])
+        XCTAssertEqual(event.get("x") as? Int, 1)
+    }
+
+    func testSubscriptKey() {
+        let event = WebhookEvent.parse(["event": "test", "data": ["x": 1] as [String: Any], "timestamp": ""])
+        XCTAssertEqual(event["x"] as? Int, 1)
+    }
+
+    func testToString() {
+        let event = WebhookEvent.parse(["event": "endpoint.created", "data": [:] as [String: Any], "timestamp": "2026-05-19"])
+        XCTAssertNotNil(event.description)
+    }
 }
