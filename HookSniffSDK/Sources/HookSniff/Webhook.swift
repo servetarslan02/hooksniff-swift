@@ -34,7 +34,7 @@ public final class Webhook {
     /// - Parameters:
     ///   - payload: The raw request body (String)
     ///   - headers: Dictionary containing webhook-id, webhook-timestamp, webhook-signature
-    ///              (also accepts svix-id, svix-timestamp, svix-signature)
+    ///              (also accepts webhook-id, webhook-timestamp, webhook-signature)
     /// - Returns: A parsed WebhookEvent with typed fields
     /// - Throws: `VerificationError` if verification fails
     public func verify(payload: String, headers: [String: String]) throws -> WebhookEvent {
@@ -165,8 +165,7 @@ public final class Webhook {
     }
 
     private func getHeader(_ headers: [String: String], name: String) -> String? {
-        let svixName = name.replacingOccurrences(of: "webhook-", with: "svix-")
-        return headers[name] ?? headers[svixName]
+        return headers[name]
     }
 
     private static func computeHMAC(secret: Data, content: String) -> Data {
