@@ -89,6 +89,11 @@ public class HookSniff {
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
         }
 
+        if debug {
+            print("[HookSniff] → \(method) \(baseURL)\(path)")
+        }
+        let startTime = Date()
+
         var lastError: Error?
 
         for attempt in 0...numRetries {
@@ -102,6 +107,11 @@ public class HookSniff {
                 let (data, response) = try await URLSession.shared.dataCompat(for: urlRequest)
                 let httpResponse = response as! HTTPURLResponse
                 let statusCode = httpResponse.statusCode
+
+                if debug {
+                    let elapsed = Date().timeIntervalSince(startTime) * 1000
+                    print("[HookSniff] ← \(statusCode) (\(Int(elapsed))ms)")
+                }
 
                 // 429 Rate Limit — respect Retry-After header
                 if statusCode == 429, attempt < numRetries {
