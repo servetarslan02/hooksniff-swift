@@ -43,12 +43,12 @@ public class HookSniff {
     ///   - apiKey: Your API key or JWT token.
     ///   - baseURL: Base URL of the HookSniff API (default: production).
     ///   - timeout: Request timeout in seconds (default: 30).
-    ///   - numRetries: Number of retries for 5xx errors (default: 2).
+    ///   - numRetries: Number of retries for 5xx errors (default: 3).
     public init(
         apiKey: String,
         baseURL: String? = nil,
         timeout: TimeInterval = 30,
-        numRetries: Int = 2
+        numRetries: Int = 3
     ) {
         self.apiKey = apiKey
         self.baseURL = (baseURL ?? Self.defaultBaseURL).replacingOccurrences(of: "/+$", with: "", options: .regularExpression)
@@ -85,8 +85,8 @@ public class HookSniff {
 
         for attempt in 0...numRetries {
             if attempt > 0 {
-                // Exponential backoff: 50ms, 100ms, 200ms, ...
-                let delay = UInt64(50 * Int(pow(2.0, Double(attempt - 1)))) * 1_000_000
+                // Exponential backoff: 1s, 2s, 4s, ...
+                let delay = UInt64(1000 * Int(pow(2.0, Double(attempt - 1)))) * 1_000_000
                 try await Task.sleep(nanoseconds: delay)
             }
 
@@ -98,13 +98,13 @@ public class HookSniff {
                 // 429 Rate Limit — respect Retry-After header
                 if statusCode == 429, attempt < numRetries {
                     let retryAfterHeader = httpResponse.value(forHTTPHeaderField: "Retry-After")
-                    let delayMs: UInt64
+                    let delayNs: UInt64
                     if let retryAfter = retryAfterHeader, let seconds = UInt64(retryAfter) {
-                        delayMs = seconds * 1_000_000_000
+                        delayNs = seconds * 1_000_000_000
                     } else {
-                        delayMs = UInt64(50 * Int(pow(2.0, Double(attempt)))) * 1_000_000
+                        delayNs = UInt64(1000 * Int(pow(2.0, Double(attempt)))) * 1_000_000
                     }
-                    try await Task.sleep(nanoseconds: delayMs)
+                    try await Task.sleep(nanoseconds: delayNs)
                     continue
                 }
 
