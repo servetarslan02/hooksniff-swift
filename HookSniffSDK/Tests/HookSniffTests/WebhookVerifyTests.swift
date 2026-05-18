@@ -1,7 +1,8 @@
 import XCTest
 @testable import HookSniff
+import Crypto
 
-final class WebhookTests: XCTestCase {
+final class WebhookVerifyTests: XCTestCase {
     let secret = "whsec_dGVzdA=="
     let msgId = "msg_test123"
     let timestamp = Int(Date().timeIntervalSince1970)
@@ -16,7 +17,7 @@ final class WebhookTests: XCTestCase {
     }
 
     func testVerifyValidSignature() throws {
-        let wh = Webhook(secret: secret)
+        let wh = try Webhook(secret: secret)
         let sig = sign(secret: secret, msgId: msgId, timestamp: timestamp, payload: payload)
         let headers = [
             "webhook-id": msgId,
@@ -27,8 +28,8 @@ final class WebhookTests: XCTestCase {
         XCTAssertNotNil(result)
     }
 
-    func testRejectInvalidSignature() {
-        let wh = Webhook(secret: secret)
+    func testRejectInvalidSignature() throws {
+        let wh = try Webhook(secret: secret)
         let headers = [
             "webhook-id": msgId,
             "webhook-timestamp": String(timestamp),
@@ -38,7 +39,7 @@ final class WebhookTests: XCTestCase {
     }
 
     func testSvixBrandedHeaders() throws {
-        let wh = Webhook(secret: secret)
+        let wh = try Webhook(secret: secret)
         let sig = sign(secret: secret, msgId: msgId, timestamp: timestamp, payload: payload)
         let headers = [
             "svix-id": msgId,
