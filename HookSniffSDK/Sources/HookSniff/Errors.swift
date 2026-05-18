@@ -134,7 +134,83 @@ public enum HookSniffErrorFactory {
         case 502: return BadGatewayError(message: body ?? "Bad gateway", headers: headers)
         case 503: return ServiceUnavailableError(message: body ?? "Service unavailable", headers: headers)
         case 504: return GatewayTimeoutError(message: body ?? "Gateway timeout", headers: headers)
+        case 408: return RequestTimeoutError(message: body ?? "Request timeout", headers: headers)
+        case 410: return GoneError(message: body ?? "Gone", headers: headers)
+        case 413: return PayloadTooLargeError(message: body ?? "Payload too large", headers: headers)
+        case 501: return NotImplementedError(message: body ?? "Not implemented", headers: headers)
+        case 507: return InsufficientStorageError(message: body ?? "Insufficient storage", headers: headers)
+        case 508: return LoopDetectedError(message: body ?? "Loop detected", headers: headers)(message: body ?? "Gateway timeout", headers: headers)
         default: return HookSniffApiError(statusCode: statusCode, message: body ?? "HTTP \(statusCode)", headers: headers)
         }
     }
+}
+
+/// 408 Request Timeout — The server timed out waiting for the request
+public struct RequestTimeoutError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Request timeout", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
+}
+
+/// 410 Gone — The resource has been permanently removed
+public struct GoneError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Gone", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
+}
+
+/// 413 Payload Too Large
+public struct PayloadTooLargeError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Payload too large", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
+}
+
+/// 501 Not Implemented
+public struct NotImplementedError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Not implemented", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
+}
+
+/// 507 Insufficient Storage
+public struct InsufficientStorageError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Insufficient storage", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
+}
+
+/// 508 Loop Detected
+public struct LoopDetectedError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Loop detected", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
+}
+
+/// Timeout — request exceeded the configured timeout
+public struct TimeoutError: Error, LocalizedError {
+    public let message: String
+    public init(message: String = "Request timeout") { self.message = message }
+    public var errorDescription: String? { message }
+}
+
+/// Network error — connection failed
+public struct NetworkError: Error, LocalizedError {
+    public let message: String
+    public init(message: String = "Network error") { self.message = message }
+    public var errorDescription: String? { message }
+}
+
+/// Authentication error — token invalid, expired, or missing
+public struct AuthenticationError: Error, LocalizedError {
+    public let message: String
+    public let headers: [String: String]
+    public init(message: String = "Authentication failed", headers: [String: String] = [:]) { self.message = message; self.headers = headers }
+    public var errorDescription: String? { message }
 }
