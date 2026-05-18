@@ -72,7 +72,7 @@ public class HookSniff {
         // Headers
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         urlRequest.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-        urlRequest.setValue("hooksniff-sdk/1.0.0/swift", forHTTPHeaderField: "User-Agent")
+        urlRequest.setValue("hooksniff-sdk/1.1.0/swift", forHTTPHeaderField: "User-Agent")
         urlRequest.setValue(autoIdempotencyKey(), forHTTPHeaderField: "Idempotency-Key")
 
         // Body
