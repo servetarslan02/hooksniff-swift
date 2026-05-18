@@ -15,7 +15,5 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.7'
   s.source_files  = 'HookSniffSDK/Sources/HookSniff/**/*.swift'
-  s.frameworks    = 'Foundation'
-
-  s.dependency 'Crypto', '~> 3.0'
+  s.frameworks    = 'Foundation', 'CryptoKit'
 end
