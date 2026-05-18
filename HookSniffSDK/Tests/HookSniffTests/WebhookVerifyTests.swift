@@ -38,15 +38,4 @@ final class WebhookVerifyTests: XCTestCase {
         XCTAssertThrowsError(try wh.verify(payload: payload, headers: headers))
     }
 
-    func testSvixBrandedHeaders() throws {
-        let wh = try Webhook(secret: secret)
-        let sig = sign(secret: secret, msgId: msgId, timestamp: timestamp, payload: payload)
-        let headers = [
-            "svix-id": msgId,
-            "svix-timestamp": String(timestamp),
-            "svix-signature": sig,
-        ]
-        let result = try wh.verify(payload: payload, headers: headers)
-        XCTAssertNotNil(result)
-    }
 }

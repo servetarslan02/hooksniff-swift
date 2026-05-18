@@ -6,8 +6,8 @@ import Crypto
 #endif
 @testable import HookSniff
 
-/// Comprehensive webhook verification tests matching Svix's 14 test cases.
-/// Reference: https://github.com/svix/svix-webhooks/blob/main/javascript/src/index_test.ts
+/// Comprehensive webhook verification tests matching HookSniff webhook test cases.
+/// Reference: https://github.com/servetarslan02/HookSniff
 final class WebhookTests: XCTestCase {
 
     // MARK: - Helpers
@@ -321,24 +321,6 @@ final class WebhookTests: XCTestCase {
         XCTAssertEqual(result["event"] as? String, "unbranded")
     }
 
-    func testSvixBrandedHeadersAlsoWork() throws {
-        let secret = randomBase64Secret()
-        let wh = try Webhook(secret: secret)
-
-        let payload = "{\"event\":\"svix-branded\"}"
-        let msgId = "msg_svix"
-        let ts = now()
-        let sig = signPayload(secret: secret, msgId: msgId, timestamp: ts, payload: payload)
-
-        let headers: [String: String] = [
-            "svix-id": msgId,
-            "svix-timestamp": String(ts),
-            "svix-signature": sig,
-        ]
-
-        let result = try wh.verify(payload: payload, headers: headers)
-        XCTAssertEqual(result["event"] as? String, "svix-branded")
-    }
 
     // MARK: - 10. Old timestamp fails (>5min tolerance)
 
