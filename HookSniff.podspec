@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.description  = 'Official Swift SDK for the HookSniff webhook infrastructure platform. Send, receive, and verify webhooks.'
   s.homepage     = 'https://github.com/servetarslan02/hooksniff-swift'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
-  s.author       = { 'name' => 'HookSniff', 'email' => 'support@hooksniff.vercel.app' }
+  s.author       = { 'name' => 'HookSniff', 'email' => 'servetarslan02@gmail.com' }
   s.source       = { :git => 'https://github.com/servetarslan02/hooksniff-swift.git', :tag => "v#{s.version}" }
 
   s.ios.deployment_target = '13.0'
