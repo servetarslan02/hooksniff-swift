@@ -38,6 +38,7 @@ public class HookSniff {
     public lazy var connector = ConnectorResource(client: self)
     public lazy var integration = IntegrationResource(client: self)
     public lazy var stream = StreamResource(client: self)
+    public lazy var eventTypes = EventTypesResource(client: self)
 
     /// Create a new HookSniff client.
     ///

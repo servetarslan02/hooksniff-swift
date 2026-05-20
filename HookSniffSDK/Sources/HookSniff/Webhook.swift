@@ -8,6 +8,8 @@ import Crypto
 /// Webhook signature verification for incoming HookSniff webhooks.
 ///
 /// Verifies HMAC-SHA256 signatures in Standard Webhooks format.
+/// Supports both HookSniff-branded (`hooksniff-id`, `hooksniff-timestamp`, `hooksniff-signature`)
+/// and Standard Webhooks (`webhook-id`, `webhook-timestamp`, `webhook-signature`) headers.
 /// Supports `whsec_` prefixed secrets and replay protection (5-minute tolerance).
 ///
 /// Usage:
@@ -33,8 +35,8 @@ public final class Webhook {
     ///
     /// - Parameters:
     ///   - payload: The raw request body (String)
-    ///   - headers: Dictionary containing webhook-id, webhook-timestamp, webhook-signature
-    ///              (also accepts webhook-id, webhook-timestamp, webhook-signature)
+    ///   - headers: Dictionary containing hooksniff-id, hooksniff-timestamp, hooksniff-signature
+    ///              (also accepts Standard Webhooks: webhook-id, webhook-timestamp, webhook-signature)
     /// - Returns: A parsed WebhookEvent with typed fields
     /// - Throws: `VerificationError` if verification fails
     public func verify(payload: String, headers: [String: String]) throws -> WebhookEvent {
@@ -165,6 +167,12 @@ public final class Webhook {
     }
 
     private func getHeader(_ headers: [String: String], name: String) -> String? {
+        // Try HookSniff-branded header first (hooksniff-id, hooksniff-timestamp, hooksniff-signature)
+        let brandedName = name.replacingOccurrences(of: "webhook-", with: "hooksniff-")
+        if let value = headers[brandedName], !value.isEmpty {
+            return value
+        }
+        // Fall back to Standard Webhooks header (webhook-id, webhook-timestamp, webhook-signature)
         return headers[name]
     }
 
