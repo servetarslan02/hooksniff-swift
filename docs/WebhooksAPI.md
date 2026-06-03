@@ -1,6 +1,6 @@
 # WebhooksAPI
 
-All URIs are relative to *https://hooksniff-api-1046140057667.europe-west1.run.app/v1*
+All URIs are relative to *https://hooksniff-api-e6ztf3x2ma-ew.a.run.app/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

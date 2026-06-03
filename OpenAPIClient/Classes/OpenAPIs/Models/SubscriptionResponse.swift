@@ -18,9 +18,9 @@ public struct SubscriptionResponse: Codable, JSONEncodable, Hashable {
     public var webhookLimit: Int
     public var endpointLimit: Int
     public var retentionDays: Int
-    public var monthlyPriceCents: Int
+    public var monthlyPriceCents: Int64
 
-    public init(plan: String, status: String, paymentProvider: String, webhookLimit: Int, endpointLimit: Int, retentionDays: Int, monthlyPriceCents: Int) {
+    public init(plan: String, status: String, paymentProvider: String, webhookLimit: Int, endpointLimit: Int, retentionDays: Int, monthlyPriceCents: Int64) {
         self.plan = plan
         self.status = status
         self.paymentProvider = paymentProvider

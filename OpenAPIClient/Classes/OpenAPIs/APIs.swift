@@ -9,7 +9,7 @@ import Foundation
 import FoundationNetworking
 #endif
 open class OpenAPIClientAPI {
-    public static var basePath = "https://hooksniff-api-1046140057667.europe-west1.run.app/v1"
+    public static var basePath = "https://hooksniff-api-e6ztf3x2ma-ew.a.run.app/v1"
     public static var customHeaders: [String: String] = [:]
     public static var credential: URLCredential?
     public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory()

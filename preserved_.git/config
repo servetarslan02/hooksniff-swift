@@ -1,0 +1,21 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/servetarslan02/hooksniff-swift
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[gc]
+	auto = 0
+[includeIf "gitdir:/home/runner/work/HookSniff/HookSniff/sdk-repo/.git"]
+	path = /home/runner/work/_temp/git-credentials-b71b01d0-b53d-49bc-8f9f-2ffaca0e21b1.config
+[includeIf "gitdir:/home/runner/work/HookSniff/HookSniff/sdk-repo/.git/worktrees/*"]
+	path = /home/runner/work/_temp/git-credentials-b71b01d0-b53d-49bc-8f9f-2ffaca0e21b1.config
+[includeIf "gitdir:/github/workspace/sdk-repo/.git"]
+	path = /github/runner_temp/git-credentials-b71b01d0-b53d-49bc-8f9f-2ffaca0e21b1.config
+[includeIf "gitdir:/github/workspace/sdk-repo/.git/worktrees/*"]
+	path = /github/runner_temp/git-credentials-b71b01d0-b53d-49bc-8f9f-2ffaca0e21b1.config
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
