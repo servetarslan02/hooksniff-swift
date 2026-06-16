@@ -1,4 +1,4 @@
-# OutboundIpsResponse
+# OutboundIPsResponse
 
 ## Properties
 Name | Type | Description | Notes

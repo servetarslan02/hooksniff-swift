@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 # **outboundIpsGet**
 ```swift
-    open class func outboundIpsGet(completion: @escaping (_ data: OutboundIpsResponse?, _ error: Error?) -> Void)
+    open class func outboundIpsGet(completion: @escaping (_ data: OutboundIPsResponse?, _ error: Error?) -> Void)
 ```
 
 Get outbound IP addresses for firewall whitelisting
@@ -38,7 +38,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**OutboundIpsResponse**](OutboundIpsResponse.md)
+[**OutboundIPsResponse**](OutboundIPsResponse.md)
 
 ### Authorization
 

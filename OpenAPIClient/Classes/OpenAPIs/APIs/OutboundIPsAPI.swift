@@ -19,7 +19,7 @@ open class OutboundIPsAPI {
      - parameter completion: completion handler to receive the data and the error objects
      */
     @discardableResult
-    open class func outboundIpsGet(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: OutboundIpsResponse?, _ error: Error?) -> Void)) -> RequestTask {
+    open class func outboundIpsGet(apiResponseQueue: DispatchQueue = OpenAPIClientAPI.apiResponseQueue, completion: @escaping ((_ data: OutboundIPsResponse?, _ error: Error?) -> Void)) -> RequestTask {
         return outboundIpsGetWithRequestBuilder().execute(apiResponseQueue) { result in
             switch result {
             case let .success(response):
@@ -33,9 +33,9 @@ open class OutboundIPsAPI {
     /**
      Get outbound IP addresses for firewall whitelisting
      - GET /outbound-ips
-     - returns: RequestBuilder<OutboundIpsResponse> 
+     - returns: RequestBuilder<OutboundIPsResponse> 
      */
-    open class func outboundIpsGetWithRequestBuilder() -> RequestBuilder<OutboundIpsResponse> {
+    open class func outboundIpsGetWithRequestBuilder() -> RequestBuilder<OutboundIPsResponse> {
         let localVariablePath = "/outbound-ips"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
@@ -48,7 +48,7 @@ open class OutboundIPsAPI {
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<OutboundIpsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<OutboundIPsResponse>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
