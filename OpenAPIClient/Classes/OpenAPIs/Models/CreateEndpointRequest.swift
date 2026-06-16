@@ -30,8 +30,10 @@ public struct CreateEndpointRequest: Codable, JSONEncodable, Hashable {
     public var routingStrategy: RoutingStrategy?
     public var fallbackUrl: String?
     public var format: Format? = .standard
+    public var applicationId: String?
 
     public init(url: String, description: String? = nil, allowedIps: [String]? = nil, eventFilter: [String]? = nil, customHeaders: AnyCodable? = nil, retryPolicy: RetryPolicy? = nil, routingStrategy: RoutingStrategy? = nil, fallbackUrl: String? = nil, format: Format? = .standard) {
+    public var applicationId: String?
         self.url = url
         self.description = description
         self.allowedIps = allowedIps
